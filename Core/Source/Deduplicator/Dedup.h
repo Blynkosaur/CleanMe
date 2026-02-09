@@ -21,5 +21,6 @@ public:
   std::vector<char> hashFile();
   void groupHashes();
   int getDupeCount();
+  void operator=(std::string newPath);
 };
 #endif
