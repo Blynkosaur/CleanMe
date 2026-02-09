@@ -9,3 +9,8 @@ Parser::Parser(const std::string inputPath)
         std::filesystem::current_path());
   }
 }
+Parser::Parser()
+    : workingDirectory{std::filesystem::current_path()}, errorStatus{},
+      iterator{
+          std::filesystem::recursive_directory_iterator(workingDirectory)} {}
+void Parser::scan() {}
