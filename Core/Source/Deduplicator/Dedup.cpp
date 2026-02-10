@@ -1,12 +1,22 @@
 #include "Dedup.h"
 #include <fstream>
 #include <ios>
+#include <vector>
 
-int Deduplicator::getDupeCount() { return dupeCount; }
+int Deduplicator::getDupeCount() {
+  for (auto &[hash, paths] : fileHashmap) {
+    if (paths.size() > 1) {
+      hasDupe = true;
+      duplicates.push_back(hash);
+      dupeCount++;
+    }
+  }
+  return dupeCount;
+}
+std::vector<std::string> &Deduplicator::getDupes() { return duplicates; }
 
 Deduplicator::Deduplicator(const std::vector<std::filesystem::path> &inputPaths)
-    : paths(inputPaths) {}
-
+    : paths(inputPaths), duplicates({}), fileHashmap({}), hasDupe(false) {}
 void Deduplicator::operator=(std::string path) {}
 
 std::string Deduplicator::hashFile(std::string path) {
@@ -28,6 +38,13 @@ std::string Deduplicator::hashFile(std::string path) {
 #endif
 
   delete[] buffer;
-  return
+  return stringHash;
 };
-void Deduplicator::groupHashes() {};
+
+void Deduplicator::groupHashes() {
+  for (auto path : paths) {
+
+    std::string hashed = hashFile(path);
+    fileHashmap[hashed].push_back(path);
+  }
+};

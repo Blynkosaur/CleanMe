@@ -13,16 +13,17 @@ class Deduplicator {
 
 private:
   bool hasDupe;
-  std::map<int, int> goon;
-  std::map<std::string, std::vector<std::string>> fileHashmap;
+  std::map<std::string, std::vector<std::filesystem ::path>> fileHashmap;
   int dupeCount;
   std::vector<std::filesystem::path> paths;
+  std::vector<std::string> duplicates;
 
 public:
   Deduplicator(const std::vector<std::filesystem::path> &);
   std::string hashFile(std::string);
   void groupHashes();
   int getDupeCount();
+  std::vector<std::string> &getDupes();
   void operator=(std::string newPath);
 };
 #endif
