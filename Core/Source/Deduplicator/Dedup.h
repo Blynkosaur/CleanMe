@@ -1,3 +1,4 @@
+#define DEBUG
 #ifndef DDUP_H
 
 #define DDUP_H
@@ -5,6 +6,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <openssl/md5.h>
 #include <string>
 #include <vector>
 class Deduplicator {
@@ -18,7 +20,7 @@ private:
 
 public:
   Deduplicator(const std::vector<std::filesystem::path> &);
-  std::vector<char> hashFile();
+  std::string hashFile(std::string);
   void groupHashes();
   int getDupeCount();
   void operator=(std::string newPath);

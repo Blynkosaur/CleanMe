@@ -20,6 +20,12 @@ project "App"
       "Core"
    }
 
+   -- OpenSSL (Homebrew on macOS) - needed because Core links it
+   filter "system:macosx"
+      local brew = os.getenv("HOMEBREW_PREFIX") or "/opt/homebrew"
+      libdirs { brew .. "/opt/openssl/lib" }
+      links { "crypto" }
+
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
    objdir ("../Binaries/Intermediates/" .. OutputDir .. "/%{prj.name}")
 

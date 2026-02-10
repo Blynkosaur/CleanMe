@@ -1,4 +1,6 @@
 #include "Dedup.h"
+#include <fstream>
+#include <ios>
 
 int Deduplicator::getDupeCount() { return dupeCount; }
 
@@ -7,5 +9,25 @@ Deduplicator::Deduplicator(const std::vector<std::filesystem::path> &inputPaths)
 
 void Deduplicator::operator=(std::string path) {}
 
-std::vector<char> Deduplicator::hashFile() {};
+std::string Deduplicator::hashFile(std::string path) {
+  std::ifstream file(path, std::ios::in | std::ios::binary | std::ios::ate);
+  if (!file.is_open()) {
+    throw std::errc::io_error;
+  }
+  long fileSize = file.tellg();
+  char *buffer = new char[fileSize];
+  file.seekg(0, std::ios::beg);
+  file.read(buffer, fileSize);
+  file.close();
+
+  unsigned char md5Buffer[MD5_DIGEST_LENGTH];
+  MD5(reinterpret_cast<unsigned char *>(buffer), fileSize, md5Buffer);
+  std::string stringHash = std::string(reinterpret_cast<char *>(md5Buffer));
+#ifdef DEBUG
+  std::cout << stringHash << std::endl;
+#endif
+
+  delete[] buffer;
+  return
+};
 void Deduplicator::groupHashes() {};

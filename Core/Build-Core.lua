@@ -12,6 +12,13 @@ project "Core"
       "Source"
    }
 
+   -- OpenSSL (Homebrew on macOS)
+   filter "system:macosx"
+      local brew = os.getenv("HOMEBREW_PREFIX") or "/opt/homebrew"
+      includedirs { brew .. "/opt/openssl/include" }
+      libdirs { brew .. "/opt/openssl/lib" }
+      links { "crypto" }
+
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
    objdir ("../Binaries/Intermediates/" .. OutputDir .. "/%{prj.name}")
 
